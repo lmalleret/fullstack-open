@@ -63,8 +63,8 @@ function App() {
                 <img src={country.flags.png} alt={country.flags.alt} />
                 <h3>Weather in {country.name.common}</h3>
                 <p>temperature {weather.current.temp} Celcius</p>
-                <img src={weather.current.weather[0].icon} alt="weather icon" />
-                <p>wind {`https://openweathermap.org/img/wn/${weather.current.wind_speed}.png`}m/s</p>
+                <img src={`https://openweathermap.org/img/wn/${weather.current.weather[0].icon}.png`} alt="weather icon" />
+                <p>wind {weather.current.wind_speed}m/s</p>
               </div>
             )}
           </div>
