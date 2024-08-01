@@ -31,10 +31,10 @@ const PersonForm = ({ persons, setPersons, handleSetNotification }) => {
           message: "Success: Contact Add",
         });
       })
-      .catch(() =>
+      .catch((error) =>
         handleSetNotification({
           type: "error",
-          message: "Error: Contact was deleted form server",
+          message: error.response.data.error,
         })
       );
   };
