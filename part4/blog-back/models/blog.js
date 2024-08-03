@@ -3,9 +3,21 @@ const logger = require("../utils/logger");
 const config = require("../utils/config");
 
 const blogSchema = new mongoose.Schema({
-  title: String,
-  author: String,
-  url: String,
+  title: {
+    type: String,
+    minLength: 3,
+    required: true,
+  },
+  author: {
+    type: String,
+    minLength: 3,
+    required: true,
+  },
+  url: {
+    type: String,
+    minLength: 3,
+    required: true,
+  },
   likes: Number,
 });
 
