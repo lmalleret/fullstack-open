@@ -3,6 +3,8 @@ const assert = require("node:assert");
 const mongoose = require("mongoose");
 const supertest = require("supertest");
 const Blog = require("../models/blog");
+const User = require("../models/user");
+const bcrypt = require("bcrypt");
 const app = require("../app");
 
 const api = supertest(app);
@@ -46,38 +48,57 @@ const blogs = [
   },
 ];
 
+let token = null;
+
 beforeEach(async () => {
   await Blog.deleteMany({});
-  let blogObject = new Blog(blogs[0]);
-  await blogObject.save();
-  blogObject = new Blog(blogs[1]);
-  await blogObject.save();
-  blogObject = new Blog(blogs[2]);
-  await blogObject.save();
-  blogObject = new Blog(blogs[3]);
-  await blogObject.save();
-  blogObject = new Blog(blogs[4]);
-  await blogObject.save();
-  blogObject = new Blog(blogs[5]);
-  await blogObject.save();
+  await User.deleteMany({});
+
+  // Crea un nuevo usuario
+  const user = new User({
+    username: "luchanga321",
+    name: "luciano malleret",
+    passwordHash: await bcrypt.hash("malleret99", 10), // Asegúrate de tener bcrypt importado
+  });
+
+  await user.save();
+
+  // Obtén el token de autenticación
+  const response = await api.post("/api/login").send({
+    username: "luchanga321",
+    password: "malleret99",
+  });
+  token = response.body.token;
+
+  // Agrega los blogs a la base de datos
+  for (let blog of blogs) {
+    await api
+      .post("/api/blogs")
+      .set("Authorization", `Bearer ${token}`)
+      .send(blog)
+      .expect(201); // Asegúrate de que el blog se crea correctamente
+  }
 });
 
 test("blogs are returned as json", async () => {
   await api
     .get("/api/blogs")
+    .set("Authorization", `Bearer ${token}`)
     .expect(200)
     .expect("Content-Type", /application\/json/);
 });
 
 test("blogs identifier name is id", async () => {
-  const response = await api.get("/api/blogs");
+  const response = await api
+    .get("/api/blogs")
+    .set("Authorization", `Bearer ${token}`);
   const objKeysList = Object.keys(response.body[0]);
 
   assert.strictEqual(objKeysList.includes("id"), true);
   assert.strictEqual(objKeysList.includes("_id"), false);
 });
 
-test(`blogs post to DB`, async () => {
+test("blogs post to DB", async () => {
   const newBlog = {
     title: "async/await simplifies making async calls",
     author: "Luciano Malleret",
@@ -87,20 +108,38 @@ test(`blogs post to DB`, async () => {
 
   await api
     .post("/api/blogs")
+    .set("Authorization", `Bearer ${token}`)
     .send(newBlog)
     .expect(201)
     .expect("Content-Type", /application\/json/);
 
-  const response = await api.get("/api/blogs");
+  const response = await api
+    .get("/api/blogs")
+    .set("Authorization", `Bearer ${token}`);
 
   const contents = response.body.map((r) => r.title);
 
   assert.strictEqual(response.body.length, blogs.length + 1);
-
   assert(contents.includes("async/await simplifies making async calls"));
 });
 
-test(`likes 0 by default`, async () => {
+test("blogs post to DB with invalid auth", async () => {
+  const newBlog = {
+    title: "async/await simplifies making async calls",
+    author: "Luciano Malleret",
+    url: "https://fullstackopen.com/es/part4/probando_el_backend#mas-pruebas-y-refactorizacion-del-backend",
+    likes: 8,
+  };
+
+  await api
+    .post("/api/blogs")
+    .set("Authorization", "Bearer invalidtoken")
+    .send(newBlog)
+    .expect(401)
+    .expect("Content-Type", /application\/json/);
+});
+
+test("likes 0 by default", async () => {
   const newBlog = {
     title: "async/await simplifies making async calls",
     author: "Luciano Malleret",
@@ -109,58 +148,85 @@ test(`likes 0 by default`, async () => {
 
   await api
     .post("/api/blogs")
+    .set("Authorization", `Bearer ${token}`)
     .send(newBlog)
     .expect(201)
     .expect("Content-Type", /application\/json/);
 
-  const response = await api.get("/api/blogs");
+  const response = await api
+    .get("/api/blogs")
+    .set("Authorization", `Bearer ${token}`);
 
   const contents = response.body.map((r) => r.title);
 
   assert.strictEqual(response.body.length, blogs.length + 1);
-
   assert(contents.includes("async/await simplifies making async calls"));
 });
 
-test(`missing blog properties`, async () => {
+test("missing blog properties", async () => {
   const newBlog = {};
 
   await api
     .post("/api/blogs")
+    .set("Authorization", `Bearer ${token}`)
     .send(newBlog)
     .expect(400)
     .expect("Content-Type", /application\/json/);
 
-  const response = await api.get("/api/blogs");
+  const response = await api
+    .get("/api/blogs")
+    .set("Authorization", `Bearer ${token}`);
 
   assert.strictEqual(response.body.length, blogs.length);
 });
 
 test("deleting blog from DB", async () => {
-  const blogsAtStart = await api.get("/api/blogs");
+  const blogsAtStart = await api
+    .get("/api/blogs")
+    .set("Authorization", `Bearer ${token}`);
   const blogToDelete = blogsAtStart.body[0];
-  await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
-  const blogAtEnd = await api.get("/api/blogs");
-  assert.strictEqual(blogs.length - 1, blogAtEnd.body.length);
+  await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .set("Authorization", `Bearer ${token}`)
+    .expect(204);
+  const blogAtEnd = await api
+    .get("/api/blogs")
+    .set("Authorization", `Bearer ${token}`);
+  assert.strictEqual(blogAtEnd.body.length, blogs.length - 1);
 });
 
 test("updating blog from DB", async () => {
-  const blogsAtStart = await api.get("/api/blogs");
+  const blogsAtStart = await api
+    .get("/api/blogs")
+    .set("Authorization", `Bearer ${token}`);
   const blogToUpdate = blogsAtStart.body[0];
   const newBlog = { ...blogToUpdate, likes: 5 };
-  await api.put(`/api/blogs/${blogToUpdate.id}`).send(newBlog).expect(200);
-  const blogAtEnd = await api.get("/api/blogs");
-  assert.strictEqual(blogAtEnd.body[0].likes, 5);
+  await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .set("Authorization", `Bearer ${token}`)
+    .send(newBlog)
+    .expect(200);
+  const blogAtEnd = await api
+    .get("/api/blogs")
+    .set("Authorization", `Bearer ${token}`);
+  assert.strictEqual(
+    blogAtEnd.body.find((b) => b.id === blogToUpdate.id).likes,
+    5
+  );
 });
 
 test(`there are ${blogs.length} blogs`, async () => {
-  const response = await api.get("/api/blogs");
+  const response = await api
+    .get("/api/blogs")
+    .set("Authorization", `Bearer ${token}`);
 
   assert.strictEqual(response.body.length, blogs.length);
 });
 
 test("the first blog is about React patterns", async () => {
-  const response = await api.get("/api/blogs");
+  const response = await api
+    .get("/api/blogs")
+    .set("Authorization", `Bearer ${token}`);
 
   const contents = response.body.map((e) => e.title);
   assert.strictEqual(contents.includes("React patterns"), true);

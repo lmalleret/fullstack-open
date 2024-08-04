@@ -1,5 +1,6 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx1Y2hhbmdhMzIxIiwiaWQiOiI2NmFmZDhiZWM1YmRiOGYxYjE5ZTkwODEiLCJpYXQiOjE3MjI4MDM2ODZ9.QhIeA3WeOWo_oSRFcFLfrI8Z3UejL_qc4e4L7VF0mKE
 
 {
     "title": "Never gonna give you app",
