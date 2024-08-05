@@ -21,17 +21,17 @@ usersRouter.post("/", async (request, response) => {
     });
   }
 
-  if (!(username.length < 3 && password.length < 3)) {
+  if (!(username.length > 3 && password.length > 3)) {
     return response.status(400).json({
-      error: "username and password most be have 3 characters min",
+      error: "username and password must be at least 4 characters long",
     });
   }
 
-  const userInDB = User.findOne({username});
+  const userInDB = await User.findOne({ username });
 
   if (userInDB) {
     return response.status(400).json({
-      error: "username already exist",
+      error: "username already exists",
     });
   }
 

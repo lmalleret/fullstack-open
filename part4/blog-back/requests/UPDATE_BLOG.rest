@@ -1,0 +1,16 @@
+PUT http://localhost:3001/api/blogs/66afe9acac46ab04992e376c
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx1Y2hhbmdhMzIxIiwiaWQiOiI2NmFmZDhiZWM1YmRiOGYxYjE5ZTkwODEiLCJpYXQiOjE3MjI4MDM2ODZ9.QhIeA3WeOWo_oSRFcFLfrI8Z3UejL_qc4e4L7VF0mKE
+
+{
+    "title": "Never gonna give you app",
+    "author": "Rick Astley",
+    "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ&pp=ygUXbmV2ZXIgZ29ubmEgZ2l2ZSB5b3UgdXA%3D",
+    "likes": 0,
+    "user": {
+      "username": "luchanga321",
+      "name": "Luciano Malleret",
+      "id": "66afd8bec5bdb8f1b19e9081"
+    },
+    "id": "66afe9acac46ab04992e376c"
+  }

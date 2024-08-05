@@ -1,7 +1,7 @@
 import React from "react";
 import blogService from "../services/blogs";
 
-function NewBlogForm({blogs, setBlogs, handleSetNotification}) {
+function NewBlogForm({ blogs, setBlogs, handleSetNotification }) {
   const [newBlog, setNewBlog] = React.useState({
     title: "",
     author: "",
@@ -14,24 +14,25 @@ function NewBlogForm({blogs, setBlogs, handleSetNotification}) {
 
   const submitNewBlog = async (event) => {
     event.preventDefault();
-    try{
-        const blogSave = await blogService.create(newBlog);
-    setBlogs([...blogs, newBlog])
-    setNewBlog({ title: "", author: "", url: "" });
-    handleSetNotification({
+    try {
+      const blogSave = await blogService.create(newBlog);
+      setBlogs([...blogs, newBlog]);
+      setNewBlog({ title: "", author: "", url: "" });
+      handleSetNotification({
         type: "success",
         message: "Success: Entrie created",
       });
-    }catch(err){
-        handleSetNotification({
-            type: "error",
-            message: "Error: Entrie could not be created",
-          });
+    } catch (err) {
+      handleSetNotification({
+        type: "error",
+        message: "Error: Entrie could not be created",
+      });
     }
   };
 
   return (
     <>
+      <h2>create new entrie</h2>
       <form onSubmit={submitNewBlog}>
         <div>
           <span>title: </span>
