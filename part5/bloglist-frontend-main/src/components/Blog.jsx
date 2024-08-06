@@ -35,7 +35,7 @@ const Blog = ({ blog }) => {
   return (
     <>
       {!deleteBlog && (
-        <div style={blogStyle}>
+        <div className="blog" style={blogStyle}>
           {blog.id}
           {blog.title} {blog.author}
           <Togglable

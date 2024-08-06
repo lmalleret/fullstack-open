@@ -16,7 +16,7 @@ const App = () => {
     async function fetchBlogs() {
       blogService.setToken(user.token);
       const blogs = await blogService.getAll();
-      blogs.sort((a,b)=>  b.likes - a.likes)
+      blogs.sort((a, b) => b.likes - a.likes);
       setBlogs(blogs);
     }
     if (user) {
@@ -60,14 +60,18 @@ const App = () => {
           <span>{user.name} logged in</span>
           <button onClick={handleLogout}>logout</button>
           <Notification notification={notification} />
-          <Togglable buttonShowLabel="new blog" buttonHideLabel="cancel" ref={blogFormRef}>
+          <Togglable
+            buttonShowLabel="new blog"
+            buttonHideLabel="cancel"
+            ref={blogFormRef}
+          >
             <NewBlogForm
               blogs={blogs}
               setBlogs={setBlogs}
               handleSetNotification={handleSetNotification}
             />
           </Togglable>
-          
+
           {blogs.map((blog) => (
             <Blog key={blog.id} blog={blog} />
           ))}
