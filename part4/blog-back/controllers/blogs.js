@@ -1,4 +1,3 @@
-
 const blogsRouter = require("express").Router();
 const Blog = require("../models/blog");
 const User = require("../models/user");
@@ -28,10 +27,10 @@ blogsRouter.delete("/:id", async (request, response, next) => {
   const user = request.user;
   const blog = await Blog.findById(id);
 
-  if ( blog.user.toString() === user.id.toString() ){
+  if (blog.user.toString() === user.id.toString()) {
     const blogDeleted = await Blog.findByIdAndDelete(id);
     return response.status(204).send();
-  }else{
+  } else {
     return response.status(401).send();
   }
 });
@@ -52,7 +51,12 @@ blogsRouter.post("/", async (request, response, next) => {
   user.blogs = user.blogs.concat(savedBlog._id);
   await user.save();
 
-  response.status(201).json(savedBlog);
+  const populatedBlog = await Blog.findById(savedBlog._id).populate("user", {
+    username: 1,
+    name: 1,
+  });
+
+  response.status(201).json(populatedBlog);
 });
 
 blogsRouter.delete("/:id", async (request, response, next) => {

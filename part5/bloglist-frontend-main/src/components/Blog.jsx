@@ -36,7 +36,6 @@ const Blog = ({ blog }) => {
     <>
       {!deleteBlog && (
         <div className="blog" style={blogStyle}>
-          {blog.id}
           {blog.title} {blog.author}
           <Togglable
             buttonShowLabel="show"

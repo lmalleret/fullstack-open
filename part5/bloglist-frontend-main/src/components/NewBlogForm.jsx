@@ -16,7 +16,7 @@ function NewBlogForm({ blogs, setBlogs, handleSetNotification }) {
     event.preventDefault();
     try {
       const blogSave = await blogService.create(newBlog);
-      setBlogs([...blogs, newBlog]);
+      setBlogs([...blogs, blogSave]);
       setNewBlog({ title: "", author: "", url: "" });
       handleSetNotification({
         type: "success",
@@ -53,7 +53,6 @@ function NewBlogForm({ blogs, setBlogs, handleSetNotification }) {
           />
         </div>
         <div>
-          {" "}
           <span>url: </span>
           <input
             type="text"
