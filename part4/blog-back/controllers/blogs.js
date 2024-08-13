@@ -10,6 +10,7 @@ blogsRouter.get("/", async (request, response) => {
 blogsRouter.get("/:id", (request, response, next) => {
   const id = request.params.id;
   Blog.findById(id)
+    .populate("user", { username: 1, name: 1 })
     .then((blog) => {
       if (blog) {
         response.json(blog);
