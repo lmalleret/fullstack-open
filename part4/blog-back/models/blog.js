@@ -1,6 +1,4 @@
 const mongoose = require("mongoose");
-const logger = require("../utils/logger");
-const config = require("../utils/config");
 
 const blogSchema = new mongoose.Schema({
   title: {
@@ -23,6 +21,12 @@ const blogSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Comment",
+    },
+  ],
 });
 
 blogSchema.set("toJSON", {

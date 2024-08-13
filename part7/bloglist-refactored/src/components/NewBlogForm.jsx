@@ -3,6 +3,7 @@ import { useField } from '../hooks/useFields';
 import { useDispatch } from 'react-redux';
 import { createBlog } from '../reducers/blogReducer';
 import { setNotification } from '../reducers/notificationReducer';
+import { Container, Typography, TextField, Button, Box } from '@mui/material';
 
 function NewBlogForm() {
   const title = useField('text', 'title');
@@ -24,7 +25,7 @@ function NewBlogForm() {
         setNotification(
           {
             type: 'success',
-            message: 'Success: Entrie created',
+            message: 'Success: Entry created',
           },
           5
         )
@@ -34,7 +35,7 @@ function NewBlogForm() {
         setNotification(
           {
             type: 'error',
-            message: 'Error: Entrie could not be created',
+            message: 'Error: Entry could not be created',
           },
           5
         )
@@ -43,24 +44,44 @@ function NewBlogForm() {
   };
 
   return (
-    <>
-      <h2>create new entrie</h2>
-      <form onSubmit={submitNewBlog}>
-        <div>
-          <span>title: </span>
-          <input {...title} />
-        </div>
-        <div>
-          <span>author: </span>
-          <input {...author} />
-        </div>
-        <div>
-          <span>url: </span>
-          <input {...url} />
-        </div>
-        <button type="submit">create</button>
-      </form>
-    </>
+    <Container component="main" maxWidth="xs">
+      <Box sx={{ mt: 4 }}>
+        <Typography variant="h5" gutterBottom>
+          Create New Entry
+        </Typography>
+        <Box component="form" onSubmit={submitNewBlog} sx={{ mt: 2 }}>
+          <TextField
+            label="Title"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            {...title}
+          />
+          <TextField
+            label="Author"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            {...author}
+          />
+          <TextField
+            label="URL"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            {...url}
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            sx={{ mt: 2 }}
+          >
+            Create
+          </Button>
+        </Box>
+      </Box>
+    </Container>
   );
 }
 

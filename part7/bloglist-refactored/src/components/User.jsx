@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import userService from '../services/users';
+import { Container, Typography, List, ListItem, Box } from '@mui/material';
 
 function User() {
   const id = useParams().id;
@@ -15,19 +16,23 @@ function User() {
   }, [id]);
 
   return (
-    <>
+    <Container component="main" maxWidth="md">
       {user && (
-        <>
-          <h2>{user.name}</h2>
-          <h3>added blogs</h3>
-          <ul>
+        <Box sx={{ mt: 4 }}>
+          <Typography variant="h4" gutterBottom>
+            {user.name}
+          </Typography>
+          <Typography variant="h6" gutterBottom>
+            Added Blogs
+          </Typography>
+          <List>
             {user.blogs.map((blog) => (
-              <li key={blog.id}>{blog.title}</li>
+              <ListItem key={blog.id}>{blog.title}</ListItem>
             ))}
-          </ul>
-        </>
+          </List>
+        </Box>
       )}
-    </>
+    </Container>
   );
 }
 
