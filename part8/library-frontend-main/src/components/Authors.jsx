@@ -3,7 +3,7 @@ import { ALL_AUTHORS, EDIT_AUTHOR } from "../graphql/querys";
 import { useMutation, useQuery } from "@apollo/client";
 
 const Authors = (props) => {
-  const authors = useQuery(ALL_AUTHORS, { pollInterval: 2000 });
+  const authors = useQuery(ALL_AUTHORS, { pollInterval: 10000 });
   const [name, setName] = useState("");
   const [birthyear, setBirthyear] = useState("");
   const [editAuthor] = useMutation(EDIT_AUTHOR);
@@ -40,7 +40,7 @@ const Authors = (props) => {
             <th>books</th>
           </tr>
           {authors.data.allAuthors.map((a) => (
-            <tr key={a.id} onClick={fillForm}>
+            <tr key={a.name} onClick={fillForm}>
               <td>{a.name}</td>
               <td>{a.born}</td>
               <td>{a.bookCount}</td>
