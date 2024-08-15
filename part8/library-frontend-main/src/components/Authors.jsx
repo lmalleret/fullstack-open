@@ -3,13 +3,14 @@ import { ALL_AUTHORS, EDIT_AUTHOR } from "../graphql/querys";
 import { useMutation, useQuery } from "@apollo/client";
 
 const Authors = (props) => {
-  if (!props.show) {
-    return null;
-  }
   const authors = useQuery(ALL_AUTHORS, { pollInterval: 2000 });
   const [name, setName] = useState("");
   const [birthyear, setBirthyear] = useState("");
   const [editAuthor] = useMutation(EDIT_AUTHOR);
+
+  if (!props.show) {
+    return null;
+  }
 
   const updatedAuthorBirthday = (event) => {
     event.preventDefault();
