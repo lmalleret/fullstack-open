@@ -1,6 +1,4 @@
-import { Linter } from 'eslint';
-
-const config: Linter.Config = {
+const config = {
     "root": true,
     "parser": "@typescript-eslint/parser",
     "plugins": [
