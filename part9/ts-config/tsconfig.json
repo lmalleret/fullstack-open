@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",                           // Define el estándar de JavaScript que será emitido
+    "module": "ESNext",                           // Define el sistema de módulos
+    "moduleResolution": "Node",                   // Resuelve módulos en el estilo de Node.js
+    "strict": true,                               // Activa todas las verificaciones estrictas
+    "esModuleInterop": true,                      // Habilita la interoperabilidad entre ES Modules y CommonJS
+    "skipLibCheck": true,                         // Omitir la comprobación de tipos en archivos de declaración
+    "forceConsistentCasingInFileNames": true,     // Asegura un caso consistente en los nombres de archivos
+    "resolveJsonModule": true,                    // Permite importar módulos JSON
+    "allowSyntheticDefaultImports": true,         // Permite importar módulos con importaciones predeterminadas
+    "declaration": true,                          // Genera archivos de declaración (.d.ts)
+    "noImplicitAny": true,                        // Previene el uso de variables sin tipo explícito
+    "noImplicitReturns": true,                    // Previene funciones que no tienen un valor de retorno en todos los caminos
+    "strictNullChecks": true,                     // Asegura que null y undefined sean manejados explícitamente
+    "strictPropertyInitialization": true,         // Asegura que todas las propiedades de clase sean inicializadas
+    "strictBindCallApply": true,                  // Asegura que las funciones bind/call/apply sean usadas correctamente
+    "noUnusedLocals": true,                       // Previene variables locales no utilizadas
+    "noUnusedParameters": true,                   // Previene parámetros de funciones no utilizados
+    "noImplicitThis": true,                       // Previene el uso de 'this' implícito sin tipo
+    "alwaysStrict": true                          // Inserta "use strict" al principio de cada archivo
+  },
+  "exclude": [
+    "node_modules"                                // Excluye la carpeta "dist" donde se guarda el código de salida
+  ]
+}

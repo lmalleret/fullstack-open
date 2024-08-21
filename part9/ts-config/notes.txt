@@ -1,0 +1,1 @@
+Ten en cuenta que si estás utilizando ts-node a través de package.json, todos los argumentos de la línea de comandos para el script deben tener el prefijo *--. Entonces, si deseas ejecutar file.ts con ts-node y opciones -s y --someoption, el comando completo es: -->
